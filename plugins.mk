@@ -66,13 +66,13 @@ define elixir_deps
 endef
 
 define automix
-	if [ -f $1/mix.exs ]; then \
+	if [ -f $1/Makefile -o -f $1/rebar.config -o -f $1/rebar.config.script -o -f $1/configure.ac -o -f $1/configure.in -o -f $1/configure ]; then \
+		$$(call dep_autopatch,$2); \
+		$(MAKE) -C $1 IS_DEP=1; \
+	else \
 		$(call elixir_deps,$1); \
 		$(call render_tmpl,bs_mix_Makefile,$1/Makefile.mix); \
 		$(MAKE) -C $1 -f Makefile.mix compile-ex-dep; \
-	else \
-		$$(call dep_autopatch,$2); \
-	  $(MAKE) -C $1 IS_DEP=1; \
 	fi
 endef
 
