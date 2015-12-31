@@ -33,9 +33,9 @@ make dev
 Erlang/OTP 18 [erts-7.2] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 
 Eshell V7.2  (abort with ^G)
-1> application:ensure_all_started(test).
-{ok,[compiler,elixir,test]}
-2> test:sample().
+1> application:ensure_all_started(sample).
+{ok,[compiler,elixir,sample]}
+2> sample:test().
 #{<<"people">> => [#{<<"age">> => 27,<<"name">> => <<"Devin Torres">>}]}
 <<"{\"people\":[{\"name\":\"Devin Torres\",\"age\":27}]}">>
 ok

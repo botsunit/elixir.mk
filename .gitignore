@@ -8,6 +8,7 @@ log
 *.swp*
 *.ets
 erl_crash.dump
+_jorel
 .eunit
 .rebar
 .erlang.mk
