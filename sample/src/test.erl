@@ -10,7 +10,7 @@ sample() ->
   io:format("~p~n", [Y]).
 
 decode(Data) when is_binary(Data) ->
-	'Elixir.Poison':'decode!'(Data).
+  'Elixir.Poison':'decode!'(Data).
 
 encode(Data) ->
   'Elixir.Poison':'encode!'(Data).
