@@ -2,6 +2,8 @@
 
 A (very) experimental plugins for [erlang.mk](http://erlang.mk) to use [Elixir](http://elixir-lang.org/) modules in Erlang.
 
+The command `make` will compile all Elixir dependencies declared in `ELIXIR_DEPS` and all Elixir files in the 'src/' directory.
+
 ## Example
 
 ```
@@ -39,7 +41,11 @@ Eshell V7.2  (abort with ^G)
 #{<<"people">> => [#{<<"age">> => 27,<<"name">> => <<"Devin Torres">>}]}
 <<"{\"people\":[{\"name\":\"Devin Torres\",\"age\":27}]}">>
 ok
-3>
+3> 'Elixir.Sample':test().
+%{"people" => [%{"age" => 27, "name" => "Devin Torres"}]}
+"{\"people\":[{\"name\":\"Devin Torres\",\"age\":27}]}"
+ok
+4>
 
 ```
 

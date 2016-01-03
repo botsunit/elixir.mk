@@ -1,3 +1,27 @@
+# Copyright (c) 2015, Bots Unit<br />
+# All rights reserved.
+# 
+# Redistribution and use in source and binary forms, with or without 
+# modification, are permitted provided that the following conditions are met:
+# 
+# 1. Redistributions of source code must retain the above copyright notice, 
+#    this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright notice, 
+#    this list of conditions and the following disclaimer in the documentation 
+#    and/or other materials provided with the distribution.
+# 
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE 
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 ELIXIR_URL ?= https://github.com/elixir-lang/elixir.git
 ELIXIR_BRANCH ?= master
 ELIXIR_MIX_ENV ?= prod
@@ -6,6 +30,30 @@ ELIXIR_BIN = $(DEPS_DIR)/elixir/bin
 ALL_ELIXIR_DEPS_DIRS = $(addprefix $(DEPS_DIR)/,$(ELIXIR_DEPS))
 ALL_ELIXIR_DEPS_D = $(addsuffix /elixir_deps.mk,$(ALL_ELIXIR_DEPS_DIRS))
 dep_elixir = git $(ELIXIR_URL) $(ELIXIR_BRANCH)
+
+# Verbosity.
+
+ex_verbose_0 = @echo " EX    " $(filter %.ex,$(?F));
+ex_verbose = $(ex_verbose_$(V))
+
+# Core targets.
+
+EX_FILES = $(sort $(call core_find,src/,*.ex))
+
+ifneq ($(EX_FILES),)
+
+BEAM_FILES += $(addprefix ebin/,$(patsubst %.ex,%.beam,$(notdir $(EX_FILES))))
+
+# Rebuild EX modules when the Makefile changes.
+$(EX_FILES): $(MAKEFILE_LIST) $(DEPS_DIR)/elixir
+	@touch $@
+
+ebin/$(PROJECT).app:: $(EX_FILES) | ebin/
+	$(ex_verbose) $(ELIXIR_BIN)/elixirc $(EX_FILES) -o ebin/ 
+
+endif
+
+# Elixir deps
 
 deps:: elixir-deps
 
